@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-+jp3#m_gl(v5foj$!uno%jsc4(n=fq&h8$pr1s8b0pywen_wv9
 DEBUG = True
 
 ALLOWED_HOSTS = [
-        "20.39.198.32"
+        "20.39.198.32",
+        ".kkong2.store"
         ]
 
 
