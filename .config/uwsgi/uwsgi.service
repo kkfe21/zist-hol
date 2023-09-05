@@ -3,7 +3,11 @@ Description=uWSGI service
 After=syslog.target
 
 [Service]
+<<<<<<< HEAD
 ExecStart=/home/ubuntu/myvenv/bin/uwsgi -i /srv/zist-hol/.config/uwsgi/mysite.ini
+=======
+ExecStart=/home/azureuser/myvenv/bin/uwsgi -i /srv/zist-hol/.config/uwsgi/mysite.ini
+>>>>>>> 85dd13570c671e84a23ace050e12b082f2b00b76
 
 Restart=always
 KillSignal=SIGQUIT
