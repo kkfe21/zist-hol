@@ -24,6 +24,9 @@
 ### 1) 로컬 가상  환경 설정
 
 ``` bash
+# venv 설치
+sudo apt-get install python3-venv
+
 # myvenv 라는 Python 가상환경 생성
 python3 -m venv myvenv
 
@@ -41,7 +44,7 @@ source ./bin/activate
 pip3 install django
 
 # 배포할 프로젝트 생성
-django-admin strarproject mysite
+django-admin startproject mysite
 
 # 프로젝트에 앱(main)생성
 cd mysite
@@ -76,7 +79,8 @@ cd ../
 cd main
 mkdir templates
 cd templates
-vi index.html
+mkdir main
+vi main/index.html
 ```
 
 
