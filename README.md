@@ -79,6 +79,11 @@ cd templates
 vi index.html
 ```
 
+-main
+ ㄴtemplates
+	ㄴmain
+		ㄴindex.html
+
 
 
 index.html
