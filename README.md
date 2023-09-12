@@ -2,13 +2,13 @@
 
 
 
+[TOC]
+
+
+
 ## 1. Overview
 
-이번 핸즈온은 Public Cloud 중 Azure 에서 가상 네트워크(VNET)를 생성하고 가상 머신(VM)을 생성하여, 그 위에 Nginx와 Django를 설치합니다. 그 다음 핸즈온(#2)에서 Github Action을 이용하여 CI/CD pipeline을 구현하여 소스 코드 배포를 자동화 합니다.
-
-![zist_hol_1_architecture.png](images/zist_hol_1_architecture.png)
-
-
+​	이번 핸즈온은 Public Cloud 중 Azure 에서 가상 네트워크(VNET)를 생성하고 가상 머신(VM)을 생성하여, 그 위에 Nginx와 Django를 설치합니다. 그 다음 핸즈온(#2)에서 Github Action을 이용하여 CI/CD pipeline을 구현하여 소스 코드 배포를 자동화 합니다.
 
 ## 2. Prerequisite
 
@@ -24,9 +24,6 @@
 ### 1) 로컬 가상  환경 설정
 
 ``` bash
-# venv 설치
-sudo apt-get install python3-venv
-
 # myvenv 라는 Python 가상환경 생성
 python3 -m venv myvenv
 
@@ -44,7 +41,7 @@ source ./bin/activate
 pip3 install django
 
 # 배포할 프로젝트 생성
-django-admin startproject mysite
+django-admin strarproject mysite
 
 # 프로젝트에 앱(main)생성
 cd mysite
@@ -79,8 +76,7 @@ cd ../
 cd main
 mkdir templates
 cd templates
-mkdir main
-vi main/index.html
+vi index.html
 ```
 
 
@@ -242,6 +238,9 @@ sudo apt-get dist-upgrade
 
 # python3 패키지 매니저(pip3) 설치
 sudo apt-get install python3-pip
+
+# django 설치
+pip3 ins
 ```
 
 
