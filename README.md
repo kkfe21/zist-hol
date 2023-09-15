@@ -86,7 +86,6 @@ index.html
 ``` html
 <DOCTYPE html>
 <html lang="en">
-    </html>
 	<head>
     	<meta charset="UTF-8">
     	<meta name="viewport" content="width=device=width, initial-scale=1.0">
@@ -97,7 +96,7 @@ index.html
             Django deploy!!!
         </h1>
     </body>
-</DOCTYPE>html>
+</html>
 ```
 
 
@@ -221,8 +220,7 @@ SSH key 다운로드
 cd [ssh key 파일 있는 경로]
 
 # VM SSH 접속
-ssh -i ./[SSH key 파일] ubuntu@[VM PublicIP]
-ex) ssh -i ./kkfe-testkey.pem ubuntu@20.239.49.3
+ssh -i ./{SSH key 파일.pem} ubuntu@{VM PublicIP}
 ```
 
 
@@ -314,7 +312,7 @@ python3 manage.py runserver 0:8080
 
 ```bash
 ALLOWED_HOSTS=[
-	"VM의 Public IP"
+	"{VM의 Public IP}"
 ]
 ```
 
@@ -364,7 +362,7 @@ pip3 install uwsgi
 
 # uwsgi 실행
 uwsgi --http :[포트번호] --home [가상환경 경로] --chdir [장고프로젝트폴더 경로] -w [wsgi 모듈이 있는 폴더].wsgi
-# ex) uwsgi --http :8080 --home /home/azureuser/myvenv/ --chdir /srv/zist-hol/ -w mysite.wsgi
+# ex) uwsgi --http :8080 --home /home/ubuntu/{가상환경이름}/ --chdir /srv/{리포지토리이름}/ -w mysite.wsgi
 ```
 
 
@@ -373,7 +371,7 @@ uwsgi --http :[포트번호] --home [가상환경 경로] --chdir [장고프로�
 
 ```bash
 # 가상 환경 실행
-source myvenv/bin/activate
+source {가상환경이름}/bin/activate
 
 # manage.py가 있는 폴더로 이동
 cd /mysite
@@ -395,14 +393,20 @@ vi mysite.ini
 mysite.ini 파일
 ```bash
 [uwsgi]
-chdir = /srv/zist-hol/ # 장고 프로젝트 경로
-module = mysite.wsgi:application # uwsgi 실행 명령어의 -w 옵션과 동일
-home = /home/ubuntu/myvenv/ # 가상 환경 경로
+# 장고 프로젝트 경로
+chdir = /srv/zist-hol/
+# uwsgi 실행 명령어의 -w 옵션과 동일
+module = mysite.wsgi:application
+# 가상 환경 경로 
+home = /home/ubuntu/myvenv/ 
 
-uid = ubuntu # uwsgi를 사용할 계정
-gid = ubuntu # uwsgi를 사용할 그룹
+# uwsgi를 사용할 계정
+uid = ubuntu
+# uwsgi를 사용할 그룹
+gid = ubuntu
 
-http = :8080 # 사용할 포트 번호
+# 사용할 포트 번호
+http = :8080 
 
 enable-threads = true
 master = true
@@ -425,7 +429,7 @@ sudo mkdir -p /var/log/uwsgi/mysite
 sudo chown -R ubuntu:ubuntu /var/log/uwsgi/mysite/
 
 # mysite.ini의 옵션을 이용해서 uwsgi 실행
-sudo /home/ubuntu/myvenv/bin/uwsgi -i /srv/zist-hol/.config/uwsgi/mysite.ini
+sudo /home/ubuntu/{가상환경이름}/bin/uwsgi -i /srv/{리포지토리이름}/.config/uwsgi/mysite.ini
 ```
 
 웹 브라우저에서 서버ip:8080을 입력했을 때 정상적으로 뜨는 것을 확인.
@@ -481,7 +485,7 @@ vi mysite.conf
 ``` bash
 server {
     listen 80; # 요청을 받을 포트 번호
-    server_name [서버IP]; # 요청을 받을 서버 주소
+    server_name {VM PublicIP}; # 요청을 받을 서버 주소
     charset utf-8;
     client_max_body_size 128M;
 
@@ -506,7 +510,7 @@ vi ./uwsgi/mysite.ini
 [uwsgi]
 chdir = /srv/ubuntu/
 module = mysite.wsgi:application
-home = /home/ubuntu/myvenv/
+home = /home/ubuntu/{가상환경이름름}/
 
 uid = ubuntu
 gid = ubuntu
@@ -538,7 +542,7 @@ Description=uWSGI service
 After=syslog.target
 
 [Service]
-ExecStart=/home/ubuntu/myvenv/bin/uwsgi -i /srv/zist-hol/.config/uwsgi/mysite.ini # uwsgi를 관리자 권한으로 실행할때의 명령어
+ExecStart=/home/ubuntu/{가상환경이름}/bin/uwsgi -i /srv/{리포지토리이름}/.config/uwsgi/mysite.ini # uwsgi를 관리자 권한으로 실행할때의 명령어
 
 Restart=always
 KillSignal=SIGQUIT
@@ -557,7 +561,7 @@ WantedBy=multi-user.target
 git pull origin master
 
 # uwsgi.service 파일을 데몬(백그라운드 실행)에 등록하고 /etc/systemd/system/에 링크를 연결
-sudo ln -f /srv/zist-hol/.config/uwsgi/uwsgi.service /etc/systemd/system/uwsgi.servie
+sudo ln -f /srv/{리포지토리이름름}/.config/uwsgi/uwsgi.service /etc/systemd/system/uwsgi.servie
 
 # 데몬 새로고침
 sudo ststemctl daemon-reload
@@ -569,7 +573,7 @@ sudo systemctl enable uwsgi
 sudo systemctl restart uwsgi
 
 # Django 프로잭트 내의 nginx설정 파일을 복사해서 nginx 어플리케이션에 등록
-sudo cp -f /src/zist-hol/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
+sudo cp -f /src/{리포지토리이름}/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
 
 # sites-available 에 복사된 설정 파일을 sites-enables 폴더 안에도 링크
 sudo ln -sf /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled/mysite.conf
@@ -618,7 +622,7 @@ server {
 	}
 	
 	location /static/ {
-		alias /srv/zist-hol/static/;
+		alias /srv/{리포지토리이름}/static/;
 	}
 }
 ```
@@ -627,7 +631,7 @@ server {
 
 ``` bash
 # mysite.conf를 site-availabled에 복사
-sudo cp -f /srv/zist-hol/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
+sudo cp -f /srv/{리포지토리이름}/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
 
 # site-available의 mysite.conf와 site-enabled를 링크로 연결
 sudo ln -sf /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled/mysite.conf
@@ -649,7 +653,7 @@ nginx에 바꾼 도메인 설정하기 위해서 로컬 개발 환경에서 소�
 
 ``` bash
 ALLOWED_HOSTS = [
-	"20.39.198.32",
+	"{VM PublicIP}",
 	".kkong2.store" # 도메인 추가
 ]
 ```
@@ -669,7 +673,7 @@ server{
 	}
 	
 	location / {
-		alias /srv/sizt-hol/static/;
+		alias /srv/{리포지토리이름}/static/;
 	}
 }
 ```
@@ -693,6 +697,6 @@ sudo certbot --nginx -d www.kkong2.store
 # 인증서 자동 갱신 설정
 crontab -e
 
-0 0 1 * * azureuser /usr/bin/certbot renew --renew-hook="sudo systemctl restart uwsgi nginx" # 내용 추가 후 저장
+0 0 1 * * ubuntu /usr/bin/certbot renew --renew-hook="sudo systemctl restart uwsgi nginx" # 내용 추가 후 저장
 ```
 
