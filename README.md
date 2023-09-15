@@ -245,7 +245,7 @@ sudo apt-get dist-upgrade
 sudo apt-get install python3-pip
 
 # django 설치
-pip3 ins
+pip3 install django
 ```
 
 
