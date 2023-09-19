@@ -5,6 +5,8 @@
 
 ​	이번 핸즈온은 Public Cloud 중 Azure 에서 가상 네트워크(VNET)를 생성하고 가상 머신(VM)을 생성하여, 그 위에 Nginx와 Django를 설치합니다. 그 다음 핸즈온(#2)에서 Github Action을 이용하여 CI/CD pipeline을 구현하여 소스 코드 배포를 자동화 합니다.
 
+![zist_hol_1_architecture](images/zist_hol_1_architecture.png)
+
 ## 2. Prerequisite
 
 - Azure 환경
