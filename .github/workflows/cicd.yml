@@ -6,13 +6,27 @@ on:
         - master
 
 jobs:
-    health-check-job:
-        runs-on: ubuntu-latest
-        steps:
-          - name: checkout code
-            uses: actions/checkout@v2
-    deploy-job:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Update code
-            run: git pull
+	health-check-job: # health check job for testing and code formatting check
+		runs-on: ubuntu-latest # os for running the job
+		steps:
+		  - name: Checkout code # checking our code at current commit that triggers the workflow
+		  uses: actions/checkout@v4
+	deploy-job: # deploy job is for deploying our code to azure vm
+		runs-on: ubuntu-latest
+		steps:
+		  - name: Code Update 
+		    id: update
+		    run: cd /srv/zist-hol 
+		    	git pull
+		  - name: Copy config
+		    id: copy
+		    run: sudo cp -f /srv/zist-hol/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
+		  - name: Link config
+		    id: link
+		    run: sudo ln -sf /etc/nginx/sites-available/mysite.conf /etx/nginx/sites-enabled/mysite.conf
+		  - name: Reload daemon
+		    id: reload
+		    run: sudo systemctl daemon-reload
+		  - name: Restart Service
+		    id: restart
+		    run: sudo systemctl restart uwsgi nginx
