@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
         "20.249.208.93",
-        "www.kkong2.store"
+        "www.kkong2.store",
+        "20.39.198.229"
         ]
 
 
