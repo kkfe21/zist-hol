@@ -1,5 +1,7 @@
 # ZIST Hands on Lab Guide #1 
 
+[TOC]
+
 
 ## 1. Overview
 
@@ -235,12 +237,6 @@ sudo apt-get update
 
 # 패키지 의존성 검사 및 업그레이드
 sudo apt-get dist-upgrade
-
-# python3 패키지 매니저(pip3) 설치
-sudo apt-get install python3-pip
-
-# django 설치
-pip3 install django
 ```
 
 
@@ -298,6 +294,12 @@ python3 -m venv myvenv
 
 # 가상 환경 활성화
 source myvenv/bin/activate
+
+# python3 패키지 매니저(pip3) 설치
+sudo apt-get install python3-pip
+
+# django 설치
+pip3 install django
 
 # requirements.txt 파일을 통해 패미지 설치
 cd /srv/zist-hol/
@@ -376,7 +378,7 @@ uwsgi --http :[포트번호] --home [가상환경 경로] --chdir [장고프로�
 source {가상환경이름}/bin/activate
 
 # manage.py가 있는 폴더로 이동
-cd /mysite
+cd /srv/{리포지토리이름}
 
 # .config 라는 폴더 생성 후 이동
 mkdir .config
@@ -396,7 +398,7 @@ mysite.ini 파일
 ```bash
 [uwsgi]
 # 장고 프로젝트 경로
-chdir = /srv/zist-hol/
+chdir = /srv/{리포지토리이름}/
 # uwsgi 실행 명령어의 -w 옵션과 동일
 module = mysite.wsgi:application
 # 가상 환경 경로 
@@ -450,7 +452,7 @@ sudo vi /etc/nginx/nginx.conf
 ```
 
 ```bash
-user azureuser; # www-data로 되어있는 user를 azureuser로 변경 
+user ubuntu; # www-data로 되어있는 user를 ubuntu로 변경 
 worker_processes auto;
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
@@ -472,8 +474,7 @@ http {
 로컬 개발 환경으로 돌아와서 nginx 설정 파일 생성
 
 ``` bash
-# 프로젝트 폴더 내에 .config 폴더 생성 후 이동
-mkdir .config
+# 프로젝트 폴더 내에 .config로 이동
 cd .config
 
 # .config 폴더 내에 nginx 폴더 생성 후 이동
@@ -512,7 +513,7 @@ vi ./uwsgi/mysite.ini
 [uwsgi]
 chdir = /srv/ubuntu/
 module = mysite.wsgi:application
-home = /home/ubuntu/{가상환경이름름}/
+home = /home/ubuntu/{가상환경이름}/
 
 uid = ubuntu
 gid = ubuntu
@@ -544,7 +545,8 @@ Description=uWSGI service
 After=syslog.target
 
 [Service]
-ExecStart=/home/ubuntu/{가상환경이름}/bin/uwsgi -i /srv/{리포지토리이름}/.config/uwsgi/mysite.ini # uwsgi를 관리자 권한으로 실행할때의 명령어
+# uwsgi를 관리자 권한으로 실행할때의 명령어
+ExecStart=/home/ubuntu/{가상환경이름}/bin/uwsgi -i /srv/{리포지토리이름}/.config/uwsgi/mysite.ini 
 
 Restart=always
 KillSignal=SIGQUIT
@@ -563,10 +565,10 @@ WantedBy=multi-user.target
 git pull origin master
 
 # uwsgi.service 파일을 데몬(백그라운드 실행)에 등록하고 /etc/systemd/system/에 링크를 연결
-sudo ln -f /srv/{리포지토리이름름}/.config/uwsgi/uwsgi.service /etc/systemd/system/uwsgi.servie
+sudo ln -f /srv/{리포지토리이름}/.config/uwsgi/uwsgi.service /etc/systemd/system/uwsgi.service
 
 # 데몬 새로고침
-sudo ststemctl daemon-reload
+sudo systemctl daemon-reload
 
 # uwsgi 서비스 사용 가능하게 전환
 sudo systemctl enable uwsgi
@@ -575,7 +577,7 @@ sudo systemctl enable uwsgi
 sudo systemctl restart uwsgi
 
 # Django 프로잭트 내의 nginx설정 파일을 복사해서 nginx 어플리케이션에 등록
-sudo cp -f /src/{리포지토리이름}/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
+sudo cp -f /srv/{리포지토리이름}/.config/nginx/mysite.conf /etc/nginx/sites-available/mysite.conf
 
 # sites-available 에 복사된 설정 파일을 sites-enables 폴더 안에도 링크
 sudo ln -sf /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled/mysite.conf
@@ -614,7 +616,7 @@ python3 manage.py collectstatic
 ``` bash
 server {
 	listen 80;
-	server_name [서버IP];
+	server_name {서버IP};
 	charset utf-8;
 	client_max_body_size 128M;
 	
